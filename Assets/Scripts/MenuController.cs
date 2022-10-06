@@ -35,14 +35,31 @@ public class MenuController : MonoBehaviour
     }
 
     public void ChangeUserNameInput() {
-        bool status = UsernameInput.text.Length >= 3 ? true : false;
 
+        bool status = UsernameInput.text.Length >= 3 ? true : false;
         StartButton.SetActive(status);
     }
 
     public void SetUserName() {
         UserNameMenu.SetActive(false);
         PhotonNetwork.playerName = UsernameInput.text;
+    }
+
+    public void CreateGame() {
+        
+        PhotonNetwork.CreateRoom(CreateGameInput.text, new RoomOptions() {maxPlayers = 5}, null);
+    }
+
+    public void JoinGame() {
+
+        RoomOptions roomOptions = new RoomOptions();
+        roomOptions.maxPlayers = 5;
+        PhotonNetwork.JoinOrCreateRoom(JoinGameInput.text, roomOptions, TypedLobby.Default);
+    }
+
+    private void OnJoinedRoom() {
+
+        PhotonNetwork.LoadLevel("MainGame");
     }
 
 }
