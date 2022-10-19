@@ -8,13 +8,19 @@ public class GameManager : MonoBehaviour
     public GameObject PlayerPrefab;
     public GameObject GameCanvas;
     public GameObject SceneCamera;
+    public Text PingText;
 
-    public void Awake()
+    private void Awake()
     {
         GameCanvas.SetActive(true);
     }
 
-    public void SpawnPlayer()
+    public void Update() {
+
+        PingText.text = "Ping: " + PhotonNetwork.GetPing();
+    }
+
+    private void SpawnPlayer()
     {
         float randomValue = Random.Range(-1f, 1f);
 

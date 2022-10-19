@@ -21,6 +21,11 @@ public class Player : MonoBehaviour
     {
         if (photonView.isMine) {
             playerCamera.SetActive(true);
+            PlayerNameText.text = PhotonNetwork.playerName;
+        }
+        else {
+            PlayerNameText.text = photonView.owner.name;
+            PlayerNameText.color = Color.cyan;
         }
         
     }
@@ -37,14 +42,22 @@ public class Player : MonoBehaviour
         var move = new Vector3(Input.GetAxisRaw("Horizontal"),0);
         transform.position += move * MoveSpeed * Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.A)) {
-            sr.flipX = true;
+        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) {
+            photonView.RPC("FlipTrue", PhotonTargets.AllBuffered);
         }
 
-        if (Input.GetKeyDown(KeyCode.D)) {
-            sr.flipX = false;
+        if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) {
+            photonView.RPC("FlipFalse", PhotonTargets.AllBuffered);
         }
     }
 
+    [PunRPC]
+    private void FlipTrue() {
+        sr.flipX = true;
+    }
 
+    [PunRPC]
+    private void FlipFalse() {
+        sr.flipX = false;
+    }
 }
